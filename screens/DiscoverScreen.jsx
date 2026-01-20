@@ -5,7 +5,7 @@ export class DiscoverScreen extends Component {
   render() {
     return (
       <View>
-        <Text> textInComponent </Text>
+        <Text> Discover </Text>
       </View>
     )
   }

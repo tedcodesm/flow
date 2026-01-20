@@ -39,7 +39,7 @@ const HomeScreen = () => {
     </Text>
   </View>
 
-  <TouchableOpacity className="border rounded-full w-10 h-10 items-center justify-center border-gray-600">
+  <TouchableOpacity className="border rounded-full w-10 h-10 items-center justify-center border-white">
     <MaterialCommunityIcons name="bell-outline" size={24} color="white" />
   </TouchableOpacity>
 </ImageBackground>

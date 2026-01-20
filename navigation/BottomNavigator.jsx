@@ -17,16 +17,16 @@ const BottomNavigator = () => {
     tabBarInactiveTintColor: "gray",
     tabBarStyle: {
       backgroundColor: "#14213D",
-      borderTopLeftRadius: 80,   // rounded top corners
-      borderTopRightRadius: 80,  // rounded top corners
-      borderBottomLeftRadius: 80,  // rounded top corners
-      borderBottomRightRadius: 80,  // rounded top corners
-      position: "absolute",      // make it float
+      borderTopLeftRadius: 80,   
+      borderTopRightRadius: 80,  
+      borderBottomLeftRadius: 80,  
+      borderBottomRightRadius: 80,  
+      position: "absolute",     
       left: 10,
       right: 10,
-      bottom: 5,
-      height: 60,                // adjust height if needed
-      elevation: 5,              // shadow for Android
+      bottom: 7,
+      height: 60,              
+      elevation: 5,              
     },
     headerShown: false,
       }}
