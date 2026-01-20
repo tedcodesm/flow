@@ -1,6 +1,12 @@
-import { Text, View, StatusBar, ImageBackground, TouchableOpacity } from "react-native";
+import {
+  Text,
+  View,
+  StatusBar,
+  ImageBackground,
+  TouchableOpacity,
+} from "react-native";
 
-const SplashScreen = () => {
+const SplashScreen = ({ navigation }) => {
   return (
     <View className="flex-1 w-full relative">
       <StatusBar barStyle="light-content" backgroundColor="#14213D" />
@@ -38,7 +44,10 @@ const SplashScreen = () => {
           <View className="flex-row justify-between items-center px-6">
             <Text className="text-white text-6xl">— — —</Text>
 
-            <TouchableOpacity className="w-16 h-16 rounded-full items-center justify-center bg-yellow-400">
+            <TouchableOpacity
+              onPress={() => navigation.navigate("bottom")}
+              className="w-16 h-16 rounded-full items-center justify-center bg-yellow-400"
+            >
               <Text className="text-white font-bold">GO</Text>
             </TouchableOpacity>
           </View>
