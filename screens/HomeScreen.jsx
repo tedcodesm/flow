@@ -11,8 +11,10 @@ import {
   StyleSheet,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { DrawerActions } from "@react-navigation/native";
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   const filterIcons = {
     Bed: "bed-outline",
     Bath: "bathtub",
@@ -20,35 +22,40 @@ const HomeScreen = () => {
   };
 
   return (
-    <View className="flex-1 bg-gray-200 relative">
+    <SafeAreaView className="flex-1 bg-gray-200 relative">
       {/* Status Bar */}
       <StatusBar barStyle="light-content" backgroundColor="#14213D" />
 
       {/* Header */}
       <ImageBackground
-  source={require("../assets/dark.jpg")}
-  className="w-full px-4 py-4 flex-row justify-between  h-40"
-  imageStyle={{ borderBottomLeftRadius: 15, borderBottomRightRadius: 15 }}
->
-  <View className="gap-2">
-    <Text className="font-semibold text-white text-lg tracking-wider">
-      Hello User
-    </Text>
-    <Text className="text-white text-2xl tracking-wider">
-      Let's Start exploring
-    </Text>
-  </View>
+        source={require("../assets/dark.jpg")}
+        className="w-full px-4 py-4 flex-row justify-between  h-40"
+        imageStyle={{ borderBottomLeftRadius: 15, borderBottomRightRadius: 15 }}
+      >
+        <TouchableOpacity
+          onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
+          className=" w-14 h-14 items-center justify-center border-white"
+        >
+          <MaterialCommunityIcons name="menu" size={35} color="white" />
+        </TouchableOpacity>
+        <View className="gap-2 items-center">
+          <Text className="font-semibold text-white text-lg tracking-wider">
+            Hello User
+          </Text>
+          <Text className="text-white text-2xl tracking-wider">
+            Let's Start exploring
+          </Text>
+        </View>
 
-  <TouchableOpacity className="border rounded-full w-10 h-10 items-center justify-center border-white">
-    <MaterialCommunityIcons name="bell-outline" size={24} color="white" />
-  </TouchableOpacity>
-</ImageBackground>
-
+        <TouchableOpacity className="border rounded-full w-10 h-10 items-center justify-center border-white">
+          <MaterialCommunityIcons name="bell-outline" size={24} color="white" />
+        </TouchableOpacity>
+      </ImageBackground>
 
       {/* Main ScrollView */}
       <ScrollView
         showsVerticalScrollIndicator={false}
-        className="px-4 flex-1 absolute top-28 w-full"
+        className="px-4 flex-1 absolute top-32 w-full"
         nestedScrollEnabled={true} // Required for nested horizontal scroll on Android
       >
         {/* Search Section */}
@@ -93,7 +100,7 @@ const HomeScreen = () => {
         {/* Promo Banner */}
         <ImageBackground
           source={require("../assets/dark.jpg")}
-          imageStyle={{borderRadius:7}}
+          imageStyle={{ borderRadius: 7 }}
           className="w-full px-4 py-2 bg-[#364d7c] flex-row justify-between items-center h-20 rounded-lg mt-4"
         >
           <View>
@@ -205,7 +212,7 @@ const HomeScreen = () => {
           </View>
         </ScrollView>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 

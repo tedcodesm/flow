@@ -8,6 +8,7 @@ import HomeScreen from '../screens/HomeScreen';
 import MapScreen from '../screens/MapScreen';
 import DiscoverScreen from '../screens/DiscoverScreen';
 import ChatScreen from '../screens/ChatScreen';
+import DrawerNavigator from './DrawerNavigator';
 
 const Stack = createNativeStackNavigator();
 
@@ -16,6 +17,7 @@ const StackNavigator = () => {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Splash" component={SplashScreen} />
+        <Stack.Screen name="drawer" component={DrawerNavigator} />
         <Stack.Screen name="bottom" component={BottomNavigator} />
         <Stack.Screen name="chat" component={ChatScreen} />
         <Stack.Screen name="disc" component={DiscoverScreen} />
