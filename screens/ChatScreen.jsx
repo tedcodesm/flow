@@ -12,7 +12,7 @@ export class ChatScreen extends Component {
           <View className="flex-col w-full inset-0 flex-1 items-center justify-between py-4">
             <View className="flex flex-col items-center">
               <Text className="text-xl font-serif font-semibold px-4 py-1  rounded-full text-white">
-                Hey! Welcome to Estate Flow 😊{" "}
+                Hey! Welcome to Estate Flow 😊
               </Text>
               <Text className="text-xl font-serif font-semibold px-4 py-1 bg-blue-900 rounded-full text-white">
                 Echoflow
@@ -21,12 +21,11 @@ export class ChatScreen extends Component {
             <View className="pb-20 px-8 w-full">
               <TouchableOpacity className="  italic bg-white  px-4 py-2  rounded-xl  ">
                 <Text className="text-black text-2xl text-center  tracking-wider ">
-                  {" "}
                   Chat With Echoflow
-                </Text>{" "}
+                </Text>
               </TouchableOpacity>
             </View>
-          </View>{" "}
+          </View>
         </ImageBackground>
       </View>
     );
