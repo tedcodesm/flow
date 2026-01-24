@@ -12,14 +12,18 @@ import {
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { DrawerActions } from "@react-navigation/native";
+import { DrawerActions, useNavigation } from "@react-navigation/native";
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = () => {
   const filterIcons = {
     Bed: "bed-outline",
     Bath: "bathtub",
     "Square feet": "ruler-square",
   };
+
+  const navigation = useNavigation();
+  console.log(navigation.getParent());
+
 
   return (
     <SafeAreaView className="flex-1 bg-gray-200 relative">
@@ -29,14 +33,11 @@ const HomeScreen = ({ navigation }) => {
       {/* Header */}
       <ImageBackground
         source={require("../assets/dark.jpg")}
-        className="w-full px-4 py-4 flex-row justify-between  h-40"
-        imageStyle={{ borderBottomLeftRadius: 15, borderBottomRightRadius: 15 }}
+        className="w-full px-4 py-4 flex-row justify-between  h-24"
+        imageStyle={{ borderBottomLeftRadius: 40, borderBottomRightRadius: 40 }}
       >
-        <TouchableOpacity
-          onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-          className=" w-14 h-14 items-center justify-center border-white"
-        >
-          <MaterialCommunityIcons name="menu" size={35} color="white" />
+        <TouchableOpacity onPress={() => navigation.openDrawer()}>
+          <MaterialCommunityIcons name="menu" size={34} color="white" />
         </TouchableOpacity>
         <View className="gap-2 items-center">
           <Text className="font-semibold text-white text-lg tracking-wider">
@@ -55,7 +56,7 @@ const HomeScreen = ({ navigation }) => {
       {/* Main ScrollView */}
       <ScrollView
         showsVerticalScrollIndicator={false}
-        className="px-4 flex-1 absolute top-32 w-full"
+        className="px-4 flex-1  mt-2 w-full"
         nestedScrollEnabled={true} // Required for nested horizontal scroll on Android
       >
         {/* Search Section */}

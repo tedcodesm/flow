@@ -9,6 +9,8 @@ import MapScreen from '../screens/MapScreen';
 import DiscoverScreen from '../screens/DiscoverScreen';
 import ChatScreen from '../screens/ChatScreen';
 import DrawerNavigator from './DrawerNavigator';
+import RentPaymentScreen from '../screens/RentPaymentScreen';
+import PaymentHistoryScreen from '../screens/PaymentHistoryScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -20,6 +22,8 @@ const StackNavigator = () => {
         <Stack.Screen name="drawer" component={DrawerNavigator} />
         <Stack.Screen name="bottom" component={BottomNavigator} />
         <Stack.Screen name="chat" component={ChatScreen} />
+        <Stack.Screen name="rent" component={RentPaymentScreen} />
+        <Stack.Screen name="hist" component={PaymentHistoryScreen} />
         <Stack.Screen name="disc" component={DiscoverScreen} />
         <Stack.Screen name="map" component={MapScreen} />
       </Stack.Navigator>

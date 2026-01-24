@@ -1,55 +1,82 @@
-import {
-  createDrawerNavigator,
-  DrawerItemList,
-} from "@react-navigation/drawer";
-import React, { Component } from "react";
-import { Text, View } from "react-native";
+import { createDrawerNavigator, DrawerItemList } from "@react-navigation/drawer";
+import React from "react";
+import { View, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import HomeScreen from "../screens/HomeScreen";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+
 import BottomNavigator from "./BottomNavigator";
 import ChatScreen from "../screens/ChatScreen";
+import MapScreen from "../screens/MapScreen";
+import DiscoverScreen from "../screens/DiscoverScreen";
+import RentPaymentScreen from "../screens/RentPaymentScreen";
+import PaymentHistoryScreen from "../screens/PaymentHistoryScreen";
 
 const Drawer = createDrawerNavigator();
 
-export class DrawerNavigator extends Component {
-  render() {
-    return (
-      <Drawer.Navigator
-        drawerContent={(props) => {
-          return (
-            <SafeAreaView>
-              <View className="w-full justify-center rounded-br-3xl bg-blue-400 items-center gap-4 h-40 mb-5"></View>
-              <DrawerItemList {...props} />
-            </SafeAreaView>
-          );
+const DrawerNavigator = () => {
+  return (
+    <Drawer.Navigator
+      drawerContent={(props) => (
+        <SafeAreaView style={{ flex: 1 }}>
+          <View className="w-full justify-center rounded-br-3xl bg-blue-400 items-center h-40 mb-5">
+            <Image
+              className="h-40 w-full object-cover rounded-b-xl"
+              source={require("../assets/dark.jpg")}
+            />
+          </View>
+          <DrawerItemList {...props} />
+        </SafeAreaView>
+      )}
+      screenOptions={{
+        headerShown: false,
+        drawerActiveBackgroundColor: "#3b82f6",
+        drawerActiveTintColor: "#fff",
+        drawerInactiveTintColor: "#14213D",
+        drawerLabelStyle: { marginLeft: 10, fontSize: 14 },
+      }}
+    >
+      <Drawer.Screen
+        name="bottom"
+        component={BottomNavigator}
+        options={{
+          drawerLabel: "Home",
+          drawerIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="home" size={size} color={color} />
+          ),
         }}
-        screenOptions={{
-          headerShown: false,
-          drawerActiveBackgroundColor: "blue",
-          drawerActiveTintColor: "red",
-          drawerInactiveTintColor: "yellow",
-          drawerLabelStyle: { marginLeft: -20, fontSize: 12 },
+      />
+      <Drawer.Screen
+        name="rent"
+        component={RentPaymentScreen}
+        options={{
+          drawerLabel: "Payments",
+          drawerIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="cash" size={size} color={color} />
+          ),
         }}
-      >
-        <Drawer.Screen
-          name="chat"
-          component={ChatScreen}
-          options={{
-            drawerLabel: "Home",
-            drawerIcon: ({ color }) => (
-              <MaterialCommunityIcons
-                className="mr-4"
-                name="home"
-                size={25}
-                color="orange"
-              />
-            ),
-          }}
-        />
-      </Drawer.Navigator>
-    );
-  }
-}
+      />
+      <Drawer.Screen
+        name="map"
+        component={MapScreen}
+        options={{
+          drawerLabel: "Map",
+          drawerIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="map" size={size} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="hist"
+        component={PaymentHistoryScreen}
+        options={{
+          drawerLabel: "Payment history",
+          drawerIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="history" size={size} color={color} />
+          ),
+        }}
+      />
+    </Drawer.Navigator>
+  );
+};
 
 export default DrawerNavigator;

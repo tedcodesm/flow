@@ -4,7 +4,7 @@ import { useEffect } from "react";
 const SplashScreen = ({ navigation }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigation.navigate("bottom"); 
+      navigation.replace("drawer"); 
     }, 2000); 
 
     return () => clearTimeout(timer); 
