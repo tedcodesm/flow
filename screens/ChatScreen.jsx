@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import { Text, View, ImageBackground, TouchableOpacity } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export class ChatScreen extends Component {
   render() {
     return (
-      <View className="w-full flex-1">
+      <SafeAreaView className="w-full flex-1">
         <ImageBackground
           source={require("../assets/bot2.jpg")}
           className="w-full flex-1 relative"
@@ -27,7 +28,7 @@ export class ChatScreen extends Component {
             </View>
           </View>
         </ImageBackground>
-      </View>
+      </SafeAreaView>
     );
   }
 }

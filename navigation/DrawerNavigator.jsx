@@ -20,7 +20,7 @@ const DrawerNavigator = () => {
         <SafeAreaView style={{ flex: 1 }}>
           <View className="w-full justify-center rounded-br-3xl bg-blue-400 items-center h-40 mb-5">
             <Image
-              className="h-40 w-full object-cover rounded-b-xl"
+              className="h-32 w-full object-cover rounded-b-xl"
               source={require("../assets/dark.jpg")}
             />
           </View>
@@ -45,6 +45,16 @@ const DrawerNavigator = () => {
           ),
         }}
       />
+        <Drawer.Screen
+        name="map"
+        component={MapScreen}
+        options={{
+          drawerLabel: "Map",
+          drawerIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="map" size={size} color={color} />
+          ),
+        }}
+      />
       <Drawer.Screen
         name="rent"
         component={RentPaymentScreen}
@@ -55,16 +65,7 @@ const DrawerNavigator = () => {
           ),
         }}
       />
-      <Drawer.Screen
-        name="map"
-        component={MapScreen}
-        options={{
-          drawerLabel: "Map",
-          drawerIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="map" size={size} color={color} />
-          ),
-        }}
-      />
+    
       <Drawer.Screen
         name="hist"
         component={PaymentHistoryScreen}
