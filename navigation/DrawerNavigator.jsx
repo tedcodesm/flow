@@ -10,6 +10,8 @@ import MapScreen from "../screens/MapScreen";
 import DiscoverScreen from "../screens/DiscoverScreen";
 import RentPaymentScreen from "../screens/RentPaymentScreen";
 import PaymentHistoryScreen from "../screens/PaymentHistoryScreen";
+import TenantProfileSreen from "../screens/TenantProfileSreen";
+import PropertyScreen from "../screens/PropertyScreen";
 
 const Drawer = createDrawerNavigator();
 
@@ -18,7 +20,7 @@ const DrawerNavigator = () => {
     <Drawer.Navigator
       drawerContent={(props) => (
         <SafeAreaView style={{ flex: 1 }}>
-          <View className="w-full justify-center rounded-br-3xl bg-blue-400 items-center h-40 mb-5">
+          <View className="w-full justify-center rounded-br-3xl bg-blue-400 items-center h-32 mb-5">
             <Image
               className="h-32 w-full object-cover rounded-b-xl"
               source={require("../assets/dark.jpg")}
@@ -73,6 +75,26 @@ const DrawerNavigator = () => {
           drawerLabel: "Payment history",
           drawerIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="history" size={size} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="ten"
+        component={TenantProfileSreen}
+        options={{
+          drawerLabel: "Tenant profile",
+          drawerIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="account" size={size} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="prop"
+        component={PropertyScreen}
+        options={{
+          drawerLabel: "Properties ",
+          drawerIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="home" size={size} color={color} />
           ),
         }}
       />
