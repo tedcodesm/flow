@@ -13,6 +13,7 @@ import RentPaymentScreen from '../screens/RentPaymentScreen';
 import PaymentHistoryScreen from '../screens/PaymentHistoryScreen';
 import TenantProfileSreen from '../screens/TenantProfileSreen';
 import PropertyScreen from '../screens/PropertyScreen';
+import IncomeReportScreen from '../screens/IncomeReportScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -30,6 +31,7 @@ const StackNavigator = () => {
         <Stack.Screen name="map" component={MapScreen} />
         <Stack.Screen name="ten" component={TenantProfileSreen} />
         <Stack.Screen name="prop" component={PropertyScreen} />
+        <Stack.Screen name="inc" component={IncomeReportScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

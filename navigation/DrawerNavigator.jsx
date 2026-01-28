@@ -12,6 +12,7 @@ import RentPaymentScreen from "../screens/RentPaymentScreen";
 import PaymentHistoryScreen from "../screens/PaymentHistoryScreen";
 import TenantProfileSreen from "../screens/TenantProfileSreen";
 import PropertyScreen from "../screens/PropertyScreen";
+import IncomeReportScreen from "../screens/IncomeReportScreen";
 
 const Drawer = createDrawerNavigator();
 
@@ -95,6 +96,16 @@ const DrawerNavigator = () => {
           drawerLabel: "Properties ",
           drawerIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="home" size={size} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="inc"
+        component={IncomeReportScreen}
+        options={{
+          drawerLabel: "Income Report ",
+          drawerIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="statistics" size={size} color={color} />
           ),
         }}
       />
