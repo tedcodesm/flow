@@ -13,6 +13,7 @@ import PaymentHistoryScreen from "../screens/PaymentHistoryScreen";
 import TenantProfileSreen from "../screens/TenantProfileSreen";
 import PropertyScreen from "../screens/PropertyScreen";
 import IncomeReportScreen from "../screens/IncomeReportScreen";
+import CreatePropertyScreen from "../screens/CreatePropertyScreen";
 
 const Drawer = createDrawerNavigator();
 
@@ -49,12 +50,12 @@ const DrawerNavigator = () => {
         }}
       />
         <Drawer.Screen
-        name="map"
-        component={MapScreen}
+        name="createproperty"
+        component={CreatePropertyScreen}
         options={{
-          drawerLabel: "Map",
+          drawerLabel: "Create Property",
           drawerIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="map" size={size} color={color} />
+            <MaterialCommunityIcons name="plus-circle-outline" size={size} color={color} />
           ),
         }}
       />

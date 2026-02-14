@@ -14,6 +14,10 @@ import PaymentHistoryScreen from '../screens/PaymentHistoryScreen';
 import TenantProfileSreen from '../screens/TenantProfileSreen';
 import PropertyScreen from '../screens/PropertyScreen';
 import IncomeReportScreen from '../screens/IncomeReportScreen';
+import LoginScreen from '../screens/LoginScreen';
+import SignUpScreen from '../screens/SignUpScreen';
+import OtpScreen from '../screens/OtpScreen';
+import CreatePropertyScreen from '../screens/CreatePropertyScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -32,6 +36,10 @@ const StackNavigator = () => {
         <Stack.Screen name="ten" component={TenantProfileSreen} />
         <Stack.Screen name="prop" component={PropertyScreen} />
         <Stack.Screen name="inc" component={IncomeReportScreen} />
+        <Stack.Screen name="login" component={LoginScreen} />
+        <Stack.Screen name="signup" component={SignUpScreen} />
+        <Stack.Screen name="otp" component={OtpScreen} />
+        <Stack.Screen name="createproperty" component={CreatePropertyScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

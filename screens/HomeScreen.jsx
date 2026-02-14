@@ -111,7 +111,7 @@ const HomeScreen = () => {
             </Text>
           </View>
 
-          <TouchableOpacity className="border rounded-full py-2 px-4 border-white">
+          <TouchableOpacity onPress={() => navigation.navigate("signup")} className="border rounded-full py-2 px-4 border-white">
             <Text className="text-white">Explore</Text>
           </TouchableOpacity>
         </ImageBackground>

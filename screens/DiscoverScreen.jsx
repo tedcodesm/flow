@@ -1,14 +1,128 @@
-import React, { Component } from 'react'
-import { Text, View } from 'react-native'
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+  Image,
+  ActivityIndicator,
+  FlatList,
+} from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import axios from "axios";
+import { BASE_URL } from "../config/Ip"; // your backend base URL
 
-export class DiscoverScreen extends Component {
-  render() {
-    return (
-      <View>
-        <Text> Discover </Text>
+export default function DiscoverScreen() {
+  const [properties, setProperties] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState("all"); // rent, sale, all
+
+  // Fetch properties from backend
+  const fetchProperties = async () => {
+    try {
+      const res = await axios.get(`${BASE_URL}/property`);
+      setProperties(res.data);
+    } catch (error) {
+      console.error("Error fetching properties:", error.message);
+      alert("Failed to fetch properties.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProperties();
+  }, []);
+
+  // Filtered list
+  const filteredProperties = properties.filter(
+    (property) =>
+      (filter === "all" || property.propertytype.toLowerCase() === filter) &&
+      property.title.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const renderPropertyCard = ({ item }) => (
+    <TouchableOpacity className="bg-white rounded-2xl shadow-lg mb-6 overflow-hidden">
+      <Image
+        source={{ uri: item.image || "https://via.placeholder.com/400" }} // fallback image
+        className="w-full h-48"
+        resizeMode="cover"
+      />
+      <View className="p-4">
+        <Text className="text-lg font-bold text-gray-800">{item.title}</Text>
+        <Text className="text-gray-500">{item.address}</Text>
+        <Text className="text-[#14213D] font-bold mt-2">
+          {item.propertytype.toLowerCase() === "rent"
+            ? `$${item.price}/month`
+            : `$${item.price}`}
+        </Text>
+        <Text className="text-gray-600 mt-1 text-sm">
+          Landlord: {item.landlord?.name || "Unknown"}
+        </Text>
       </View>
-    )
-  }
-}
+    </TouchableOpacity>
+  );
 
-export default DiscoverScreen
+  return (
+    <View className="flex-1 bg-[#14213D]">
+      {/* Top Search Area */}
+      <View className="bg-[#14213D] px-4 pt-8 pb-4">
+        <Text className="text-white text-3xl font-bold mb-3">Discover</Text>
+
+        {/* Search Input */}
+        <View className="flex-row bg-gray-200 rounded-xl items-center px-4 py-2">
+          <MaterialCommunityIcons name="magnify" size={24} color="#9CA3AF" />
+          <TextInput
+            placeholder="Search properties..."
+            placeholderTextColor="#9CA3AF"
+            value={search}
+            onChangeText={setSearch}
+            className="ml-2 flex-1 text-gray-800"
+          />
+        </View>
+
+        {/* Filter Buttons */}
+        <View className="flex-row mt-4 justify-between">
+          {["all", "rent", "sale"].map((type) => (
+            <TouchableOpacity
+              key={type}
+              onPress={() => setFilter(type)}
+              className="px-4 py-2 rounded-full border"
+              style={{
+                backgroundColor:
+                  filter === type ? "#FCA311" : "#E5E7EB",
+                borderColor: filter === type ? "#FCA311" : "#D1D5DB",
+              }}
+            >
+              <Text
+                style={{
+                  color: filter === type ? "white" : "#374151",
+                  fontWeight: "600",
+                }}
+              >
+                {type.charAt(0).toUpperCase() + type.slice(1)}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </View>
+
+      {/* Property List */}
+      {loading ? (
+        <View className="flex-1 justify-center items-center">
+          <ActivityIndicator size="large" color="#FCA311" />
+        </View>
+      ) : (
+        <FlatList
+          data={filteredProperties}
+          keyExtractor={(item) => item._id}
+          renderItem={renderPropertyCard}
+          contentContainerStyle={{ padding: 16 }}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
+    </View>
+  );
+}
