@@ -18,6 +18,9 @@ import LoginScreen from '../screens/LoginScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 import OtpScreen from '../screens/OtpScreen';
 import CreatePropertyScreen from '../screens/CreatePropertyScreen';
+import PropertyDetails from '../screens/PropertyDetailsScreen';
+import DetailScreen from '../screens/DetaillsScreen';
+import BookingScreen from '../screens/BookingScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -40,6 +43,9 @@ const StackNavigator = () => {
         <Stack.Screen name="signup" component={SignUpScreen} />
         <Stack.Screen name="otp" component={OtpScreen} />
         <Stack.Screen name="createproperty" component={CreatePropertyScreen} />
+        <Stack.Screen name="propertydetails" component={PropertyDetails} />
+        <Stack.Screen name="details" component={DetailScreen} />
+        <Stack.Screen name="booking" component={BookingScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

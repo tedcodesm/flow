@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
-  ScrollView,
   TextInput,
   TouchableOpacity,
   Image,
@@ -11,6 +10,7 @@ import {
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import axios from "axios";
+import { useNavigation } from "@react-navigation/native";
 import { BASE_URL } from "../config/Ip"; // your backend base URL
 
 export default function DiscoverScreen() {
@@ -18,8 +18,9 @@ export default function DiscoverScreen() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all"); // rent, sale, all
+  const navigation = useNavigation();
 
-  // Fetch properties from backend
+  // Fetch properties list
   const fetchProperties = async () => {
     try {
       const res = await axios.get(`${BASE_URL}/property`);
@@ -44,22 +45,32 @@ export default function DiscoverScreen() {
   );
 
   const renderPropertyCard = ({ item }) => (
-    <TouchableOpacity className="bg-white rounded-2xl shadow-lg mb-6 overflow-hidden">
+    <TouchableOpacity
+      className="bg-white rounded-2xl shadow-lg mb-6 overflow-hidden"
+      onPress={() =>
+        navigation.navigate("details", {
+          propertyId: item._id,
+        })
+      }
+    >
       <Image
-        source={{ uri: item.image || "https://via.placeholder.com/400" }} // fallback image
-        className="w-full h-48"
+        source={{
+          uri:
+            item.images && item.images.length > 0
+              ? item.images[0]
+              : "https://via.placeholder.com/400",
+        }}
+        style={{ width: "100%", height: 200 }}
         resizeMode="cover"
       />
+
       <View className="p-4">
         <Text className="text-lg font-bold text-gray-800">{item.title}</Text>
-        <Text className="text-gray-500">{item.address}</Text>
+        <Text className="text-gray-500 mt-1">{item.address}</Text>
         <Text className="text-[#14213D] font-bold mt-2">
           {item.propertytype.toLowerCase() === "rent"
             ? `$${item.price}/month`
-            : `$${item.price}`}
-        </Text>
-        <Text className="text-gray-600 mt-1 text-sm">
-          Landlord: {item.landlord?.name || "Unknown"}
+            : `KSH ${item.price}`}
         </Text>
       </View>
     </TouchableOpacity>
@@ -67,11 +78,10 @@ export default function DiscoverScreen() {
 
   return (
     <View className="flex-1 bg-[#14213D]">
-      {/* Top Search Area */}
+      {/* Search & Filters */}
       <View className="bg-[#14213D] px-4 pt-8 pb-4">
         <Text className="text-white text-3xl font-bold mb-3">Discover</Text>
 
-        {/* Search Input */}
         <View className="flex-row bg-gray-200 rounded-xl items-center px-4 py-2">
           <MaterialCommunityIcons name="magnify" size={24} color="#9CA3AF" />
           <TextInput
@@ -83,7 +93,6 @@ export default function DiscoverScreen() {
           />
         </View>
 
-        {/* Filter Buttons */}
         <View className="flex-row mt-4 justify-between">
           {["all", "rent", "sale"].map((type) => (
             <TouchableOpacity
@@ -91,8 +100,7 @@ export default function DiscoverScreen() {
               onPress={() => setFilter(type)}
               className="px-4 py-2 rounded-full border"
               style={{
-                backgroundColor:
-                  filter === type ? "#FCA311" : "#E5E7EB",
+                backgroundColor: filter === type ? "#FCA311" : "#E5E7EB",
                 borderColor: filter === type ? "#FCA311" : "#D1D5DB",
               }}
             >

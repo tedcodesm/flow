@@ -13,6 +13,7 @@ import {
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { DrawerActions, useNavigation } from "@react-navigation/native";
+import { properties } from "../data/properties";
 
 const HomeScreen = () => {
   const filterIcons = {
@@ -23,7 +24,6 @@ const HomeScreen = () => {
 
   const navigation = useNavigation();
   console.log(navigation.getParent());
-
 
   return (
     <SafeAreaView className="flex-1 bg-gray-200 relative">
@@ -111,7 +111,10 @@ const HomeScreen = () => {
             </Text>
           </View>
 
-          <TouchableOpacity onPress={() => navigation.navigate("signup")} className="border rounded-full py-2 px-4 border-white">
+          <TouchableOpacity
+            onPress={() => navigation.navigate("signup")}
+            className="border rounded-full py-2 px-4 border-white"
+          >
             <Text className="text-white">Explore</Text>
           </TouchableOpacity>
         </ImageBackground>
@@ -130,87 +133,40 @@ const HomeScreen = () => {
           showsHorizontalScrollIndicator={false}
           className="mb-4"
         >
-          <View className="flex-row items-center gap-5 space-x-4">
-            {/* Card 1 */}
-            <View
-              className="flex-col relative items-center bg-white rounded-lg"
-              style={{ width: 320, height: 200 }}
-            >
-              <Image
-                source={require("../assets/house1.jpg")}
-                className="rounded-lg"
-                style={{ width: 320, height: 140 }}
-              />
-              <Text className="absolute text-white bg-[#14213D] text-center px-2 py-1 rounded-full top-2 right-4 text-lg">
-                For Rent
-              </Text>
+         <View className="flex-row items-center gap-5">
+  {properties.map((property) => (
+    <TouchableOpacity
+      key={property.id}
+      activeOpacity={0.8}
+      onPress={() =>
+        navigation.navigate("propertydetails", {
+          propertyId: property.id,
+        })
+      }
+    >
+      <View
+        className="flex-col relative items-center bg-white rounded-lg"
+        style={{ width: 320, height: 200 }}
+      >
+        <Image
+          source={property.images[0]}
+          style={{ width: 320, height: 140 }}
+        />
 
-              <View className="flex-row w-full items-center justify-between px-2 py-4">
-                <Text className="font-bold text-xl">HollyWood Hill</Text>
-                <Text className="text-blue-500 text-lg">$213/mo</Text>
-              </View>
-            </View>
+        <Text className="absolute text-white bg-[#14213D] px-2 py-1 rounded-full top-2 right-4 text-lg">
+          {property.propertytype === "sale" ? "For Sale" : "For Rent"}
+        </Text>
 
-            {/* Card 2 */}
-            <View
-              className="flex-col relative items-center bg-white rounded-lg"
-              style={{ width: 320, height: 200 }}
-            >
-              <Image
-                source={require("../assets/house2.jpg")}
-                className="rounded-lg"
-                style={{ width: 320, height: 140 }}
-              />
-              <Text className="absolute text-white bg-[#14213D] text-center px-2 py-1 rounded-full top-2 right-4 text-lg">
-                For Rent
-              </Text>
-
-              <View className="flex-row w-full items-center justify-between px-2 py-4">
-                <Text className="font-bold text-xl">HollyWood Hill</Text>
-                <Text className="text-blue-500 text-lg">$213/mo</Text>
-              </View>
-            </View>
-
-            {/* Card 3 */}
-            <View
-              className="flex-col relative items-center bg-white rounded-lg"
-              style={{ width: 320, height: 200 }}
-            >
-              <Image
-                source={require("../assets/house3.jpg")}
-                className="rounded-lg"
-                style={{ width: 320, height: 140 }}
-              />
-              <Text className="absolute text-white bg-[#14213D] text-center px-2 py-1 rounded-full top-2 right-4 text-lg">
-                For Rent
-              </Text>
-
-              <View className="flex-row w-full items-center justify-between px-2 py-4">
-                <Text className="font-bold text-xl">HollyWood Hill</Text>
-                <Text className="text-blue-500 text-lg">$213/mo</Text>
-              </View>
-            </View>
-
-            {/* Card 4 */}
-            <View
-              className="flex-col relative items-center bg-white rounded-lg"
-              style={{ width: 320, height: 200 }}
-            >
-              <Image
-                source={require("../assets/house4.jpg")}
-                className="rounded-lg"
-                style={{ width: 320, height: 140 }}
-              />
-              <Text className="absolute text-white bg-[#14213D] text-center px-2 py-1 rounded-full top-2 right-4 text-lg">
-                For Rent
-              </Text>
-
-              <View className="flex-row w-full items-center justify-between px-2 py-4">
-                <Text className="font-bold text-xl">HollyWood Hill</Text>
-                <Text className="text-blue-500 text-lg">$213/mo</Text>
-              </View>
-            </View>
-          </View>
+        <View className="flex-row w-full items-center justify-between px-2 py-4">
+          <Text className="font-bold text-xl">{property.title}</Text>
+          <Text className="text-blue-500 text-lg">
+            ${property.price}
+          </Text>
+        </View>
+      </View>
+    </TouchableOpacity>
+  ))}
+</View>
         </ScrollView>
       </ScrollView>
     </SafeAreaView>

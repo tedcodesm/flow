@@ -16,6 +16,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import axios from "axios";
 import { BASE_URL } from "../config/Ip";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState("");
@@ -24,12 +25,18 @@ export default function LoginScreen({ navigation }) {
 
   const handleSignUp = async () => {
     try {
-      await axios.post(`${BASE_URL}/auth/login`, {
+    const response = await axios.post(`${BASE_URL}/auth/login`, {
         email,
         password,
       
       });
+      const data = response.data;
+      if(data?.token){
+        // Store token in AsyncStorage or Context
+        await AsyncStorage.setItem("token", data.token);
+      }
       navigation.navigate("drawer");
+
     } catch (error) {
       alert(error?.response?.data?.message || "Login failed");
     }
@@ -66,10 +73,7 @@ export default function LoginScreen({ navigation }) {
                 Login in to your account
               </Text>
 
-              {/* Role Selection */}
-             
-
-              {/* Inputs */}
+         
             
 
               <TextInput
