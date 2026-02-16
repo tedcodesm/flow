@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Text,
   View,
@@ -14,8 +14,10 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { DrawerActions, useNavigation } from "@react-navigation/native";
 import { properties } from "../data/properties";
+import { AuthContext } from "../context/AuthContext";
 
 const HomeScreen = () => {
+  const { name, authenticated } = useContext(AuthContext);
   const filterIcons = {
     Bed: "bed-outline",
     Bath: "bathtub",
@@ -41,7 +43,7 @@ const HomeScreen = () => {
         </TouchableOpacity>
         <View className="gap-2 items-center">
           <Text className="font-semibold text-white text-lg tracking-wider">
-            Hello User
+            Hello {name ? name : "Guest"}
           </Text>
           <Text className="text-white text-2xl tracking-wider">
             Let's Start exploring
@@ -60,43 +62,56 @@ const HomeScreen = () => {
         nestedScrollEnabled={true} // Required for nested horizontal scroll on Android
       >
         {/* Search Section */}
-        <View className="gap-5 py-4 bg-white rounded-lg px-4">
-          <View className="flex-row justify-center">
-            <Text className="font-semibold w-1/2 text-center text-lg">Buy</Text>
-            <Text className="font-semibold w-1/2 text-center text-lg">
-              Rent
-            </Text>
-          </View>
-
-          <View className="flex-row items-center bg-gray-100 border border-gray-200 rounded-xl px-4 py-2">
-            <MaterialCommunityIcons
-              name="map-marker"
-              size={24}
-              color="#6B7280"
-            />
+        {authenticated ? (
+          <View className="flex-row bg-gray-200 rounded-xl items-center px-4 py-2 mb-4">
+            <MaterialCommunityIcons name="magnify" size={24} color="#9CA3AF" />
             <TextInput
-              placeholder="Search by location, property type, or price"
+              placeholder="Search properties..."
               placeholderTextColor="#9CA3AF"
-              className="flex-1 ml-3 text-base text-gray-800"
+              className="ml-2 flex-1 text-gray-800"
             />
           </View>
+        ) : (
+          <View className="bg-[#14213D] rounded-2xl p-5 mx-4 my-3 shadow-lg">
+            {/* Top icon + text row */}
+            <View className="flex-row items-center">
+              {/* Icon container */}
+              <View className="bg-white/20 p-3 rounded-xl">
+                <MaterialCommunityIcons
+                  name="heart-outline"
+                  size={26}
+                  color="white"
+                />
+              </View>
 
-          <View className="flex-row justify-between">
-            {["Bed", "Bath", "Square feet"].map((label) => (
-              <TouchableOpacity
-                key={label}
-                className="flex-row gap-1 border border-gray-300 py-1 px-2 rounded-lg items-center"
-              >
-                <MaterialCommunityIcons name={filterIcons[label]} size={20} />
-                <Text className="font-bold">{label}</Text>
-              </TouchableOpacity>
-            ))}
+              {/* Text */}
+              <View className="ml-4 flex-1">
+                <Text className="text-white text-lg font-semibold">
+                  Save your favorite homes
+                </Text>
+
+                <Text className="text-gray-200 text-sm mt-1">
+                  Login to save, compare, and contact landlords easily
+                </Text>
+              </View>
+            </View>
+
+            {/* Divider */}
+            <View className="h-[1px] bg-white/20 my-4" />
+
+            {/* Button */}
+            <TouchableOpacity
+              className="bg-white rounded-xl py-3 flex-row justify-center items-center"
+              onPress={() => navigation.navigate("login")}
+            >
+              <MaterialCommunityIcons name="login" size={20} color="#364d7c" />
+
+              <Text className="text-[#364d7c] font-semibold text-base ml-2">
+                Login or Create Account
+              </Text>
+            </TouchableOpacity>
           </View>
-
-          <TouchableOpacity className="bg-[#364d7c] py-3 rounded-full">
-            <Text className="text-center text-white text-xl">Search</Text>
-          </TouchableOpacity>
-        </View>
+        )}
 
         {/* Promo Banner */}
         <ImageBackground
@@ -133,40 +148,40 @@ const HomeScreen = () => {
           showsHorizontalScrollIndicator={false}
           className="mb-4"
         >
-         <View className="flex-row items-center gap-5">
-  {properties.map((property) => (
-    <TouchableOpacity
-      key={property.id}
-      activeOpacity={0.8}
-      onPress={() =>
-        navigation.navigate("propertydetails", {
-          propertyId: property.id,
-        })
-      }
-    >
-      <View
-        className="flex-col relative items-center bg-white rounded-lg"
-        style={{ width: 320, height: 200 }}
-      >
-        <Image
-          source={property.images[0]}
-          style={{ width: 320, height: 140 }}
-        />
+          <View className="flex-row items-center gap-5">
+            {properties.map((property) => (
+              <TouchableOpacity
+                key={property.id}
+                activeOpacity={0.8}
+                onPress={() =>
+                  navigation.navigate("propertydetails", {
+                    propertyId: property.id,
+                  })
+                }
+              >
+                <View
+                  className="flex-col relative items-center bg-white rounded-lg"
+                  style={{ width: 320, height: 200 }}
+                >
+                  <Image
+                    source={property.images[0]}
+                    style={{ width: 320, height: 140 }}
+                  />
 
-        <Text className="absolute text-white bg-[#14213D] px-2 py-1 rounded-full top-2 right-4 text-lg">
-          {property.propertytype === "sale" ? "For Sale" : "For Rent"}
-        </Text>
+                  <Text className="absolute text-white bg-[#14213D] px-2 py-1 rounded-full top-2 right-4 text-lg">
+                    {property.propertytype === "sale" ? "For Sale" : "For Rent"}
+                  </Text>
 
-        <View className="flex-row w-full items-center justify-between px-2 py-4">
-          <Text className="font-bold text-xl">{property.title}</Text>
-          <Text className="text-blue-500 text-lg">
-            ${property.price}
-          </Text>
-        </View>
-      </View>
-    </TouchableOpacity>
-  ))}
-</View>
+                  <View className="flex-row w-full items-center justify-between px-2 py-4">
+                    <Text className="font-bold text-xl">{property.title}</Text>
+                    <Text className="text-blue-500 text-lg">
+                      ${property.price}
+                    </Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            ))}
+          </View>
         </ScrollView>
       </ScrollView>
     </SafeAreaView>

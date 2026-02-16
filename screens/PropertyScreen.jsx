@@ -26,7 +26,7 @@ export class PropertyScreen extends Component {
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ paddingBottom: 100 }} // 👈 space for button
           >
-            {[1,2,3,4].map((_, index) => (
+            {[1].map((_, index) => (
               <View
                 key={index}
                 className="h-20 w-full flex-row bg-white rounded-xl gap-2 mb-4"
@@ -39,7 +39,7 @@ export class PropertyScreen extends Component {
                   <Text className="font-bold text-xl tracking-wide">
                     Spring Apartments
                   </Text>
-                  <Text className="px-2 rounded-xl bg-green-400 text-white text-lg">
+                  <Text className="px-2 rounded-xl bg-[#14213D] py-1 text-white text-lg">
                     3/5 Occupied · KSH 28,000/month
                   </Text>
                 </View>
@@ -50,7 +50,9 @@ export class PropertyScreen extends Component {
 
         {/* FIXED ADD PROPERTY BUTTON */}
         <View className="absolute bottom-4 left-4 right-4">
-          <TouchableOpacity className="py-4 bg-green-500 rounded-xl">
+          <TouchableOpacity
+          onPress={() => this.props.navigation.navigate("createproperty")}
+          className="py-4 bg-[#14213D] rounded-xl">
             <Text className="text-2xl text-white font-bold text-center">
               + Add Property
             </Text>

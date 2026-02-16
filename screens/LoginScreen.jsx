@@ -34,7 +34,11 @@ export default function LoginScreen({ navigation }) {
       if(data?.token){
         // Store token in AsyncStorage or Context
         await AsyncStorage.setItem("token", data.token);
+        await AsyncStorage.setItem("user", JSON.stringify(data.user));
+        console.log("Login successful, token stored.", data.token, data.user);
+
       }
+
       navigation.navigate("drawer");
 
     } catch (error) {

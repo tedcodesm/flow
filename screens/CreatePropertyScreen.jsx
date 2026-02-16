@@ -15,6 +15,7 @@ import * as ImagePicker from "expo-image-picker";
 import MapView, { Marker } from "react-native-maps";
 import axios from "axios";
 import { BASE_URL } from "../config/Ip";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function CreatePropertyScreen({ navigation }) {
   const [title, setTitle] = useState("");
@@ -107,6 +108,12 @@ export default function CreatePropertyScreen({ navigation }) {
     setLoading(true);
 
     try {
+      const token = await AsyncStorage.getItem("token");
+      if (!token) {
+        alert("You must be logged in to create a property");
+        return;
+      }
+
       const formData = new FormData();
       formData.append("title", title);
       formData.append("description", description);
@@ -126,9 +133,16 @@ export default function CreatePropertyScreen({ navigation }) {
         });
       });
 
-      const res = await axios.post(`${BASE_URL}/property`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+        const res = await axios.post(
+      `${BASE_URL}/property`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`, 
+        },
+      }
+    );
 
       Alert.alert("Success", "Property created successfully!");
       navigation.goBack();

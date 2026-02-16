@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import axios from "axios";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { BASE_URL } from "../config/Ip"; // your backend base URL
 
 export default function DiscoverScreen() {
@@ -20,22 +20,24 @@ export default function DiscoverScreen() {
   const [filter, setFilter] = useState("all"); // rent, sale, all
   const navigation = useNavigation();
 
-  // Fetch properties list
-  const fetchProperties = async () => {
-    try {
-      const res = await axios.get(`${BASE_URL}/property`);
-      setProperties(res.data);
-    } catch (error) {
-      console.error("Error fetching properties:", error.message);
-      alert("Failed to fetch properties.");
-    } finally {
-      setLoading(false);
-    }
-  };
+ 
+const fetchProperties = async () => {
+  try {
+    setLoading(true);
+    const res = await axios.get(`${BASE_URL}/property`);
+    setProperties(res.data);
+  } catch (error) {
+    console.log(error);
+  } finally {
+    setLoading(false);
+  }
+};
 
-  useEffect(() => {
+useFocusEffect(
+  useCallback(() => {
     fetchProperties();
-  }, []);
+  }, [])
+);
 
   // Filtered list
   const filteredProperties = properties.filter(

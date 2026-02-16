@@ -1,5 +1,5 @@
 import { createDrawerNavigator, DrawerItemList } from "@react-navigation/drawer";
-import React from "react";
+import React, { useContext } from "react";
 import { View, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -14,10 +14,27 @@ import TenantProfileSreen from "../screens/TenantProfileSreen";
 import PropertyScreen from "../screens/PropertyScreen";
 import IncomeReportScreen from "../screens/IncomeReportScreen";
 import CreatePropertyScreen from "../screens/CreatePropertyScreen";
+import { BASE_URL } from "../config/Ip";
+import { AuthContext } from "../context/AuthContext.jsx";
+
+
 
 const Drawer = createDrawerNavigator();
 
+
 const DrawerNavigator = () => {
+  const {role} = useContext(AuthContext);
+
+  // handle get user by id
+  const getUser = async () => {
+    try {
+      const res = await axios.get(`${BASE_URL}/user/:id`); // replace with actual user ID
+      console.log("User data:", res.data);
+    } catch (error) {
+      console.error("Error fetching user:", error.message);
+    }
+  };
+
   return (
     <Drawer.Navigator
       drawerContent={(props) => (
@@ -49,17 +66,54 @@ const DrawerNavigator = () => {
           ),
         }}
       />
+    {role === "landlord" && (
+  <>
+    <Drawer.Screen
+      name="createproperty"
+      component={CreatePropertyScreen}
+      options={{
+        drawerLabel: "Create Property",
+        drawerIcon: ({ color, size }) => (
+          <MaterialCommunityIcons
+            name="plus-circle-outline"
+            size={size}
+            color={color}
+          />
+        ),
+      }}
+    />
+
+    <Drawer.Screen
+      name="prop"
+      component={PropertyScreen}
+      options={{
+        drawerLabel: "Properties",
+        drawerIcon: ({ color, size }) => (
+          <MaterialCommunityIcons name="home" size={size} color={color} />
+        ),
+      }}
+    />
+
+    <Drawer.Screen
+      name="inc"
+      component={IncomeReportScreen}
+      options={{
+        drawerLabel: "Income Report",
+        drawerIcon: ({ color, size }) => (
+          <MaterialCommunityIcons
+            name="chart-line"
+            size={size}
+            color={color}
+          />
+        ),
+      }}
+    />
+  </>
+)}
+
+      {role === "tenant" && (
+        <>  
         <Drawer.Screen
-        name="createproperty"
-        component={CreatePropertyScreen}
-        options={{
-          drawerLabel: "Create Property",
-          drawerIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="plus-circle-outline" size={size} color={color} />
-          ),
-        }}
-      />
-      <Drawer.Screen
         name="rent"
         component={RentPaymentScreen}
         options={{
@@ -90,26 +144,9 @@ const DrawerNavigator = () => {
           ),
         }}
       />
-      <Drawer.Screen
-        name="prop"
-        component={PropertyScreen}
-        options={{
-          drawerLabel: "Properties ",
-          drawerIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="home" size={size} color={color} />
-          ),
-        }}
-      />
-      <Drawer.Screen
-        name="inc"
-        component={IncomeReportScreen}
-        options={{
-          drawerLabel: "Income Report ",
-          drawerIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="statistics" size={size} color={color} />
-          ),
-        }}
-      />
+        </>
+      )}
+   
     </Drawer.Navigator>
   );
 };

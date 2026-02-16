@@ -20,6 +20,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function DetailScreen({ route, navigation }) {
   const { propertyId } = route.params;
   const { width } = Dimensions.get("window");
+const [activeIndex, setActiveIndex] = useState(0);
+const [imageModalVisible, setImageModalVisible] = useState(false);
+const [modalIndex, setModalIndex] = useState(0);
 
   const [property, setProperty] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -32,7 +35,6 @@ export default function DetailScreen({ route, navigation }) {
       const token = await AsyncStorage.getItem("token");
 
       if (!token) {
-        // Show custom modal instead of Alert
         setShowModal(true);
       } else {
         console.log("Book viewing for property:", propertyId);
@@ -42,6 +44,14 @@ export default function DetailScreen({ route, navigation }) {
       console.error("Error checking login:", error.message);
     }
   };
+
+  const handleProceedToPayment = () => {
+  navigation.navigate("rent", {
+    propertyId: property._id,
+    price: property.price,
+    property: property, 
+  });
+};
 
     // check if user is logged in 
     // useEffect(() => {
@@ -89,32 +99,51 @@ export default function DetailScreen({ route, navigation }) {
 
   return (
     <ScrollView className="flex-1 bg-gray-100">
-      {/* Carousel */}
-      <View className="relative">
-        <FlatList
-          data={property.images}
-          horizontal
-          pagingEnabled
-          showsHorizontalScrollIndicator={false}
-          keyExtractor={(_, index) => index.toString()}
-          renderItem={({ item }) => (
-            <Image
-              source={{ uri: item }}
-              style={{ width, height: 250 }}
-              resizeMode="cover"
-            />
-          )}
+    <View className="relative">
+  <FlatList
+    data={property.images}
+    horizontal
+    pagingEnabled
+    showsHorizontalScrollIndicator={false}
+    onScroll={(event) => {
+      const index = Math.round(
+        event.nativeEvent.contentOffset.x / width
+      );
+      setActiveIndex(index);
+    }}
+    keyExtractor={(_, index) => index.toString()}
+    renderItem={({ item, index }) => (
+      <TouchableOpacity
+        activeOpacity={0.9}
+        onPress={() => {
+          setModalIndex(index);
+          setImageModalVisible(true);
+        }}
+      >
+        <Image
+          source={{ uri: item }}
+          style={{ width, height: 250 }}
+          resizeMode="cover"
         />
+      </TouchableOpacity>
+    )}
+  />
 
-        {/* Badge */}
-        <View className="absolute top-4 right-4 bg-[#14213D] px-3 py-1 rounded-full">
-          <Text className="text-white font-semibold">
-            {property.propertytype === "sale" ? "For Sale" : "For Rent"}
-          </Text>
-        </View>
-      </View>
+<View className="absolute top-14 left-5 bg-black/50 px-3 py-1 rounded-full">
+  <Text className="text-white">
+    {activeIndex + 1} / {property.images.length}
+  </Text>
+</View>
 
-      {/* Property Info */}
+
+  <View className="absolute top-4 right-4 bg-[#14213D] px-3 py-1 rounded-full">
+    <Text className="text-white font-semibold">
+      {property.propertytype === "sale" ? "For Sale" : "For Rent"}
+    </Text>
+  </View>
+</View>
+
+
       <View className="p-4">
         <Text className="text-2xl font-bold text-gray-800 mb-2">
           {property.title}
@@ -158,13 +187,13 @@ export default function DetailScreen({ route, navigation }) {
           <View className="flex-row items-center mb-2">
             <Feather name="user" size={18} color="gray" />
             <Text className="ml-2 text-gray-700">
-              {property.landlord?.phone}
+              {property.landlord?.username}
             </Text>
           </View>
           <View className="flex-row items-center">
             <Feather name="phone" size={18} color="gray" />
             <Text className="ml-2 text-gray-700">
-              {property.landlord?.email}
+              {property.landlord?.phone}
             </Text>
           </View>
         </View>
@@ -174,6 +203,12 @@ export default function DetailScreen({ route, navigation }) {
       onPress={handleBookViewing}
     >
       <Text className="text-white font-bold text-lg">Book Viewing</Text>
+    </TouchableOpacity>
+        <TouchableOpacity
+      className="bg-[#14213D] py-4 rounded-lg items-center mb-10"
+      onPress={handleProceedToPayment}
+    >
+      <Text className="text-white font-bold text-lg">Proceed to payment</Text>
     </TouchableOpacity>
       </View>
          <Modal
@@ -212,6 +247,39 @@ export default function DetailScreen({ route, navigation }) {
           </View>
         </View>
       </Modal>
+      <Modal visible={imageModalVisible} transparent={true}>
+  <View className="flex-1 bg-black">
+
+    <FlatList
+      data={property.images}
+      horizontal
+      pagingEnabled
+      initialScrollIndex={modalIndex}
+      getItemLayout={(_, index) => ({
+        length: width,
+        offset: width * index,
+        index,
+      })}
+      keyExtractor={(_, index) => index.toString()}
+      renderItem={({ item }) => (
+        <Image
+          source={{ uri: item }}
+          style={{ width, height: "100%" }}
+          resizeMode="contain"
+        />
+      )}
+    />
+
+    <TouchableOpacity
+      className="absolute top-14 right-5 bg-gray-700 p-3 rounded-full"
+      onPress={() => setImageModalVisible(false)}
+    >
+      <MaterialIcons name="close" size={24} color="white" />
+    </TouchableOpacity>
+
+  </View>
+</Modal>
+
     </ScrollView>
   );
 }

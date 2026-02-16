@@ -1,25 +1,75 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Text, View, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { AuthContext } from "../context/AuthContext";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as WebBrowser from "expo-web-browser";
+import { BASE_URL } from "../config/Ip";
 
-const RentPaymentScreen = () => {
-  const navigation = useNavigation(); // ✅ works here
+
+const RentPaymentScreen = ({ route }) => {
+  const navigation = useNavigation(); 
+  const {name } = useContext(AuthContext);
+  const {price,property} = route.params;
+
+const handleProceedToPayment = async () => {
+  try {
+    const token = await AsyncStorage.getItem("token");
+
+    if (!token) {
+      alert("Please login first");
+      return;
+    }
+
+    const res = await axios.post(
+      `${BASE_URL}/payment/create`,
+      {
+        propertyId: property._id,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const { redirectUrl } = res.data;
+
+    if (!redirectUrl) {
+      alert("Payment failed to start");
+      return;
+    }
+
+    // open pesapal page
+    await WebBrowser.openBrowserAsync(redirectUrl);
+
+  } catch (error) {
+    console.log(error.response?.data || error.message);
+    alert(
+      error.response?.data?.message ||
+      "Failed to initiate payment"
+    );
+  }
+};
+
 
   return (
     <SafeAreaView className="flex-1 bg-gray-200">
       <View className="flex-1 w-full flex-col px-4 gap-4 py-4">
-        <Text className="items-start font-bold text-xl text-black">Hi, User!</Text>
+        <Text className="items-start font-bold text-xl text-black">Hi, {name}!</Text>
 
         <View className="w-full flex-col gap-4 items-center justify-center h-32 rounded-xl bg-[#14213D]">
           <Text className="text-xl font-semibold tracking-wider text-white">
-            Amount Due: <Text className="font-bold text-2xl">KSH 15,000</Text>
+            Amount Due: <Text className="font-bold text-2xl">KSH {price}</Text>
           </Text>
           <Text className="font-semibold text-xl text-white">Due By : 30th April</Text>
         </View>
 
-        <TouchableOpacity className="py-2 px-4 bg-green-400 rounded-xl">
+        <TouchableOpacity className="py-2 px-4 bg-green-400 rounded-xl" onPress={handleProceedToPayment}>
           <Text className="text-white text-2xl font-bold text-center">Pay Now</Text>
         </TouchableOpacity>
 
