@@ -10,6 +10,7 @@ export const AuthProvider = ({ children }) => {
   const [role, setRole] = useState(null);
   const [name, setName] = useState(null);
   const [phone, setPhone] = useState(null);
+  const [email, setEmail] = useState(null);
 
   useEffect(() => {
     const checkIfLoggedIn = async () => {
@@ -25,6 +26,7 @@ export const AuthProvider = ({ children }) => {
           setRole(parsedUser.role);
             setName(parsedUser.username);
             setPhone(parsedUser.phone);
+            setEmail(parsedUser.email);
           console.log("User is authenticated:", parsedUser);
         }
       } catch (error) {
@@ -42,6 +44,7 @@ export const AuthProvider = ({ children }) => {
       role,
         name,
         phone,
+        email,
       setAuthenticated,
       setUser
     }}>

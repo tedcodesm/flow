@@ -1,4 +1,7 @@
-import { createDrawerNavigator, DrawerItemList } from "@react-navigation/drawer";
+import {
+  createDrawerNavigator,
+  DrawerItemList,
+} from "@react-navigation/drawer";
 import React, { useContext } from "react";
 import { View, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -16,14 +19,12 @@ import IncomeReportScreen from "../screens/IncomeReportScreen";
 import CreatePropertyScreen from "../screens/CreatePropertyScreen";
 import { BASE_URL } from "../config/Ip";
 import { AuthContext } from "../context/AuthContext.jsx";
-
-
+import LandlordProfileScreen from "../screens/LandlordProfileScreen.jsx";
 
 const Drawer = createDrawerNavigator();
 
-
 const DrawerNavigator = () => {
-  const {role} = useContext(AuthContext);
+  const { role } = useContext(AuthContext);
 
   // handle get user by id
   const getUser = async () => {
@@ -66,87 +67,108 @@ const DrawerNavigator = () => {
           ),
         }}
       />
-    {role === "landlord" && (
-  <>
-    <Drawer.Screen
-      name="createproperty"
-      component={CreatePropertyScreen}
-      options={{
-        drawerLabel: "Create Property",
-        drawerIcon: ({ color, size }) => (
-          <MaterialCommunityIcons
-            name="plus-circle-outline"
-            size={size}
-            color={color}
+      {role === "landlord" && (
+        <>
+          <Drawer.Screen
+            name="createproperty"
+            component={CreatePropertyScreen}
+            options={{
+              drawerLabel: "Create Property",
+              drawerIcon: ({ color, size }) => (
+                <MaterialCommunityIcons
+                  name="plus-circle-outline"
+                  size={size}
+                  color={color}
+                />
+              ),
+            }}
           />
-        ),
-      }}
-    />
 
-    <Drawer.Screen
-      name="prop"
-      component={PropertyScreen}
-      options={{
-        drawerLabel: "Properties",
-        drawerIcon: ({ color, size }) => (
-          <MaterialCommunityIcons name="home" size={size} color={color} />
-        ),
-      }}
-    />
-
-    <Drawer.Screen
-      name="inc"
-      component={IncomeReportScreen}
-      options={{
-        drawerLabel: "Income Report",
-        drawerIcon: ({ color, size }) => (
-          <MaterialCommunityIcons
-            name="chart-line"
-            size={size}
-            color={color}
+          <Drawer.Screen
+            name="prop"
+            component={PropertyScreen}
+            options={{
+              drawerLabel: "Properties",
+              drawerIcon: ({ color, size }) => (
+                <MaterialCommunityIcons name="home" size={size} color={color} />
+              ),
+            }}
           />
-        ),
-      }}
-    />
-  </>
-)}
 
-      {role === "tenant" && (
-        <>  
-        <Drawer.Screen
-        name="rent"
-        component={RentPaymentScreen}
-        options={{
-          drawerLabel: "Payments",
-          drawerIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="cash" size={size} color={color} />
-          ),
-        }}
-      />
-    
-      <Drawer.Screen
-        name="hist"
-        component={PaymentHistoryScreen}
-        options={{
-          drawerLabel: "Payment history",
-          drawerIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="history" size={size} color={color} />
-          ),
-        }}
-      />
-      <Drawer.Screen
-        name="ten"
-        component={TenantProfileSreen}
-        options={{
-          drawerLabel: "Tenant profile",
-          drawerIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="account" size={size} color={color} />
-          ),
-        }}
-      />
+          <Drawer.Screen
+            name="inc"
+            component={IncomeReportScreen}
+            options={{
+              drawerLabel: "Income Report",
+              drawerIcon: ({ color, size }) => (
+                <MaterialCommunityIcons
+                  name="chart-line"
+                  size={size}
+                  color={color}
+                />
+              ),
+            }}
+          />
+          <Drawer.Screen
+            name="landi"
+            component={LandlordProfileScreen}
+            options={{
+              drawerLabel: "Landlord Profile",
+              drawerIcon: ({ color, size }) => (
+                <MaterialCommunityIcons
+                  name="account"
+                  size={size}
+                  color={color}
+                />
+              ),
+            }}
+          />
         </>
       )}
-   
+
+      {role === "tenant" && (
+        <>
+          <Drawer.Screen
+            name="rent"
+            component={RentPaymentScreen}
+            options={{
+              drawerLabel: "Payments",
+              drawerIcon: ({ color, size }) => (
+                <MaterialCommunityIcons name="cash" size={size} color={color} />
+              ),
+            }}
+          />
+
+          <Drawer.Screen
+            name="hist"
+            component={PaymentHistoryScreen}
+            options={{
+              drawerLabel: "Payment history",
+              drawerIcon: ({ color, size }) => (
+                <MaterialCommunityIcons
+                  name="history"
+                  size={size}
+                  color={color}
+                />
+              ),
+            }}
+          />
+          <Drawer.Screen
+            name="ten"
+            component={TenantProfileSreen}
+            options={{
+              drawerLabel: "Tenant profile",
+              drawerIcon: ({ color, size }) => (
+                <MaterialCommunityIcons
+                  name="account"
+                  size={size}
+                  color={color}
+                />
+              ),
+            }}
+          />
+        </>
+      )}
     </Drawer.Navigator>
   );
 };

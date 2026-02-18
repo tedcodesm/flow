@@ -172,14 +172,8 @@ const [modalIndex, setModalIndex] = useState(0);
             <Text className="text-gray-500">Type</Text>
             <Text className="font-semibold">{property.propertytype}</Text>
           </View>
-          <View className="flex-row justify-between mb-2">
-            <Text className="text-gray-500">Latitude</Text>
-            <Text>{property.coordinates.lng}</Text>
-          </View>
-          <View className="flex-row justify-between">
-            <Text className="text-gray-500">Longitude</Text>
-            <Text>{property.coordinates.lat}</Text>
-          </View>
+          
+         
         </View>
 
         <View className="bg-white p-4 rounded-lg mb-6 shadow-sm">
