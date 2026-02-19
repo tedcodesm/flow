@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Text, View, Image, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { AuthContext } from "../context/AuthContext";
 
 const TenantProfileScreen = () => {
   const navigation = useNavigation();
+
+  const {name,phone ,email} = useContext(AuthContext);
 
   return (
     <SafeAreaView className="flex-1">
@@ -16,7 +19,7 @@ const TenantProfileScreen = () => {
             source={require("../assets/Luffy_.jpg")}
           />
           <View>
-            <Text className="text-xl font-bold">Edward Njoroge</Text>
+            <Text className="text-xl font-bold">{name}</Text>
             <Text className="text-lg">GreenView Villas - unit B3</Text>
           </View>
         </View>
@@ -26,7 +29,7 @@ const TenantProfileScreen = () => {
           <View className="h-[1px] bg-gray-300" />
 
           <Text className="text-xl">
-            <MaterialCommunityIcons name="phone" size={20} />  +254 789 098 988
+            <MaterialCommunityIcons name="phone" size={20} />  +254 {phone}
           </Text>
 
           <Text className="text-xl font-bold">ID 23453455</Text>

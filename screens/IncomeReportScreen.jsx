@@ -1,61 +1,106 @@
-import React, { Component } from "react";
+import React from "react";
 import { Text, View, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-export class IncomeReportScreen extends Component {
-  render() {
-    return (
-      <SafeAreaView className="flex-1 ">
-        <View className="flex flex-1 flex-col gap-4 py-4 px-2 bg-gray-200">
-          <View className="bg-white rounded-xl justify-between flex-row items-center px-2 py-2">
-            <TouchableOpacity>
-              {" "}
-              <MaterialCommunityIcons name="chevron-left" size={20} />{" "}
-            </TouchableOpacity>
-            <Text className="font-bold text-lg">
-              1st April 2027 - 30th April 2027
-            </Text>
-            <TouchableOpacity>
-              {" "}
-              <MaterialCommunityIcons name="chevron-right" size={20} />{" "}
-            </TouchableOpacity>
+const IncomeReportScreen = () => {
+  const expectedRent = 300000;
+  const collectedRent = 275000;
+
+  const progress = (collectedRent / expectedRent) * 100;
+
+  return (
+    <SafeAreaView className="flex-1 bg-gray-100">
+      <View className="flex-1 gap-4 p-4">
+
+        {/* Date Selector */}
+        <View className="bg-white rounded-2xl flex-row items-center justify-between px-4 py-3 shadow-sm">
+          <TouchableOpacity>
+            <MaterialCommunityIcons name="chevron-left" size={24} />
+          </TouchableOpacity>
+
+          <Text className="font-semibold text-base text-gray-700">
+            1 Apr 2027 - 30 Apr 2027
+          </Text>
+
+          <TouchableOpacity>
+            <MaterialCommunityIcons name="chevron-right" size={24} />
+          </TouchableOpacity>
+        </View>
+
+        {/* Total Income Card */}
+        <View className="bg-[#14213D] rounded-2xl p-5 shadow-lg">
+          <Text className="text-gray-300 text-sm">Total Income</Text>
+          <Text className="text-white text-3xl font-bold mt-1">
+            Ksh 320,000
+          </Text>
+
+          <Text className="text-gray-300 mt-3 text-sm">
+            Rent Collection Progress
+          </Text>
+
+          {/* Progress Bar */}
+          <View className="h-3 bg-gray-300 rounded-full mt-2 overflow-hidden">
+            <View
+              style={{ width: `${progress}%` }}
+              className="h-full bg-green-500 rounded-full"
+            />
           </View>
-          <View className="bg-white py-4 px-2 rounded-xl gap-3">
-            <Text className="font-bold text-xl">Income Breakdown</Text>
-            <View className="h-[1px] bg-gray-300" />
 
-            <View className="items-center w-full gap-2 flex flex-row">
-              <Text className="text-xl w-[50%]">Collected Rent : </Text>
-              <Text className="text-xl font-bold">Ksh 275,000</Text>
-            </View>
-            <View className="h-[1px] bg-gray-300" />
+          <Text className="text-gray-200 mt-2 text-xs">
+            {progress.toFixed(0)}% of expected rent collected
+          </Text>
+        </View>
 
-            <View className="items-center gap-2 flex flex-row">
-              <Text className="text-xl w-[50%]">Late Fees : </Text>
-              <Text className="text-xl font-bold">Ksh 5,000</Text>
-            </View>
-            <View className="h-[1px] bg-gray-300" />
+        {/* Income Breakdown */}
+        <View className="bg-white rounded-2xl p-4 shadow-sm">
+          <Text className="font-bold text-lg mb-3">
+            Income Breakdown
+          </Text>
 
-            <View className="items-center gap-2 flex flex-row">
-              <Text className="text-xl w-[50%]">Collected Rent : </Text>
-              <Text className="text-xl font-bold">Ksh 40,000</Text>
-            </View>
+          <View className="flex-row justify-between py-2">
+            <Text className="text-gray-600">Collected Rent</Text>
+            <Text className="font-semibold">Ksh 275,000</Text>
           </View>
-          <View className="bg-white flex-col rounded-xl gap-2 py-2 px-2">
-            <Text className="font-bold text-xl">House Overview</Text>
-            <View className="flex flex-row items-center justify-between">
-              <Text className="font-bold text-xl">Spring Apartment</Text>
-              <Text className="font-bold text-xl">
-                KSH <Text className="font-bold text-xl">75,000</Text>{" "}
-                <MaterialCommunityIcons name="chevron-right" size={20} />{" "}
-              </Text>
-            </View>
+
+          <View className="h-[1px] bg-gray-200" />
+
+          <View className="flex-row justify-between py-2">
+            <Text className="text-gray-600">Late Fees</Text>
+            <Text className="font-semibold">Ksh 5,000</Text>
+          </View>
+
+          <View className="h-[1px] bg-gray-200" />
+
+          <View className="flex-row justify-between py-2">
+            <Text className="text-gray-600">Other Charges</Text>
+            <Text className="font-semibold">Ksh 40,000</Text>
           </View>
         </View>
-      </SafeAreaView>
-    );
-  }
-}
+
+        {/* Property Overview */}
+        <View className="bg-white rounded-2xl p-4 shadow-sm">
+          <Text className="font-bold text-lg mb-3">
+            Property Overview
+          </Text>
+
+          <TouchableOpacity className="flex-row justify-between items-center py-2">
+            <Text className="font-semibold text-gray-800">
+              Spring Apartment
+            </Text>
+
+            <View className="flex-row items-center gap-1">
+              <Text className="font-bold text-gray-900">
+                Ksh 75,000
+              </Text>
+              <MaterialCommunityIcons name="chevron-right" size={20} />
+            </View>
+          </TouchableOpacity>
+        </View>
+
+      </View>
+    </SafeAreaView>
+  );
+};
 
 export default IncomeReportScreen;

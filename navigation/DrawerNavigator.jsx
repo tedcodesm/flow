@@ -20,6 +20,7 @@ import CreatePropertyScreen from "../screens/CreatePropertyScreen";
 import { BASE_URL } from "../config/Ip";
 import { AuthContext } from "../context/AuthContext.jsx";
 import LandlordProfileScreen from "../screens/LandlordProfileScreen.jsx";
+import LandlordBookingsScreen from "../screens/LandlordBookingScreen.jsx";
 
 const Drawer = createDrawerNavigator();
 
@@ -88,7 +89,7 @@ const DrawerNavigator = () => {
             name="prop"
             component={PropertyScreen}
             options={{
-              drawerLabel: "Properties",
+              drawerLabel: "My Properties",
               drawerIcon: ({ color, size }) => (
                 <MaterialCommunityIcons name="home" size={size} color={color} />
               ),
@@ -117,6 +118,20 @@ const DrawerNavigator = () => {
               drawerIcon: ({ color, size }) => (
                 <MaterialCommunityIcons
                   name="account"
+                  size={size}
+                  color={color}
+                />
+              ),
+            }}
+          />
+          <Drawer.Screen
+            name="bookings"
+            component={LandlordBookingsScreen}
+            options={{
+              drawerLabel: "Landlord Bookings",
+              drawerIcon: ({ color, size }) => (
+                <MaterialCommunityIcons
+                  name="calendar-check"
                   size={size}
                   color={color}
                 />
