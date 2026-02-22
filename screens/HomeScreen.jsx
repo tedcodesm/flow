@@ -17,12 +17,21 @@ import { properties } from "../data/properties";
 import { AuthContext } from "../context/AuthContext";
 
 const HomeScreen = () => {
-  const { name, authenticated } = useContext(AuthContext);
+  const { name, authenticated,loading } = useContext(AuthContext);
   const filterIcons = {
     Bed: "bed-outline",
     Bath: "bathtub",
     "Square feet": "ruler-square",
   };
+
+  if (loading) {
+    return (
+      <View className="flex-1 items-center justify-center">
+        <Text className="text-gray-500 text-lg">Loading...</Text>
+      </View>
+    );
+  }
+
 
   const navigation = useNavigation();
   console.log(navigation.getParent());

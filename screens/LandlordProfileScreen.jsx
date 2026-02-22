@@ -12,30 +12,23 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const LandlordProfileScreen = ({ navigation }) => {
-  const { user, name, phone, role, email, setAuthenticated, setUser } =
+  const { user, name, phone, role, email,logout, setAuthenticated, setUser } =
     useContext(AuthContext);
 
-  const handleLogout = async () => {
-    Alert.alert(
-      "Logout",
-      "Are you sure you want to logout?",
-      [
-        { text: "Cancel" },
-        {
-          text: "Logout",
-          onPress: async () => {
-            await AsyncStorage.removeItem("token");
-            await AsyncStorage.removeItem("user");
-
-            setAuthenticated(false);
-            setUser(null);
-
-            navigation.replace("login");
-          },
-        },
-      ]
-    );
-  };
+const handleLogout = () => {
+  Alert.alert(
+    "Logout",
+    "Are you sure you want to logout?",
+    [
+      { text: "Cancel" },
+      { text: "Logout", onPress: () => {
+          logout();
+          navigation.replace("login");
+        } 
+      }
+    ]
+  );
+};
 
   return (
     <SafeAreaView className="flex-1 bg-gray-100">

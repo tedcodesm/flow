@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   View,
   Text,
@@ -7,24 +7,55 @@ import {
   ActivityIndicator,
   Alert,
 } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
+
 import axios from "axios";
-import { BASE_URL } from "../config/Ip";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AuthContext } from "../context/AuthContext";
+import { BASE_URL } from "../config/Ip";
+import { io } from "socket.io-client";
 
 const LandlordBookingsScreen = () => {
+  const { user } = useContext(AuthContext); // logged-in landlord
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [socket, setSocket] = useState(null);
   const [token, setToken] = useState(null);
 
   useEffect(() => {
-    initialize();
-  }, []);
+    let isMounted = true;
 
-  const initialize = async () => {
-    const storedToken = await AsyncStorage.getItem("token");
-    setToken(storedToken);
-    fetchBookings(storedToken);
-  };
+    const initialize = async () => {
+      const storedToken = await AsyncStorage.getItem("token");
+      setToken(storedToken);
+
+      // fetch current bookings
+      await fetchBookings(storedToken);
+
+      // connect to socket
+      const socketClient = io(BASE_URL, {
+        auth: { token: storedToken },
+      });
+      setSocket(socketClient);
+
+      // join landlord room
+      socketClient.emit("joinLandlord", user._id);
+
+      // listen for new bookings
+      socketClient.on("newBooking", (booking) => {
+        if (isMounted) {
+          setBookings((prev) => [booking, ...prev]);
+        }
+      });
+    };
+
+    initialize();
+
+    return () => {
+      isMounted = false;
+      if (socket) socket.disconnect();
+    };
+  }, []);
 
   const fetchBookings = async (authToken) => {
     try {
@@ -33,7 +64,6 @@ const LandlordBookingsScreen = () => {
           Authorization: `Bearer ${authToken}`,
         },
       });
-
       setBookings(data);
     } catch (error) {
       console.log(error.response?.data || error.message);
@@ -42,25 +72,24 @@ const LandlordBookingsScreen = () => {
     }
   };
 
+  useFocusEffect(
+  React.useCallback(() => {
+    fetchBookings(token);
+  }, [token])
+);
+
   const updateBookingStatus = async (id, action) => {
     try {
       await axios.put(
         `${BASE_URL}/booking/${id}/${action}`,
         {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
       setBookings((prev) =>
         prev.map((booking) =>
           booking._id === id
-            ? {
-                ...booking,
-                status: action === "confirm" ? "confirmed" : "rejected",
-              }
+            ? { ...booking, status: action === "confirm" ? "confirmed" : "rejected" }
             : booking
         )
       );
@@ -72,27 +101,15 @@ const LandlordBookingsScreen = () => {
     }
   };
 
-
   const renderItem = ({ item }) => (
     <View className="bg-white rounded-2xl p-4 mb-4 shadow-md">
-      <Text className="text-lg font-bold text-[#14213D]">
-        {item.property?.title}
-      </Text>
-
-      <Text className="text-gray-600 mt-1">
-        Tenant: {item.tenant?.username}
-      </Text>
-
-     <Text className="text-gray-600">
-  Date: {new Date(item.viewingDate).toLocaleDateString()}
-</Text>
-
-
-      <Text className="text-gray-600">
-        Time: {item.time}
-      </Text>
-
-      <Text
+      <Text className="text-lg font-bold text-[#14213D]">{item.property?.title}</Text>
+      <Text className="text-gray-600 mt-1">Tenant: {item.tenant?.username}</Text>
+      <Text className="text-gray-600">Date: {new Date(item.viewingDate).toLocaleDateString()}</Text>
+      <Text className="text-gray-600">Time: {item.time}</Text>
+{item.message && (
+  <Text className="text-gray-600">Message: {item.message}</Text>
+)}      <Text
         className={`mt-2 font-semibold ${
           item.status === "confirmed"
             ? "text-green-600"
@@ -110,18 +127,14 @@ const LandlordBookingsScreen = () => {
             className="bg-green-600 px-4 py-2 rounded-xl w-[48%]"
             onPress={() => updateBookingStatus(item._id, "confirm")}
           >
-            <Text className="text-white text-center font-semibold">
-              Confirm
-            </Text>
+            <Text className="text-white text-center font-semibold">Confirm</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             className="bg-red-600 px-4 py-2 rounded-xl w-[48%]"
             onPress={() => updateBookingStatus(item._id, "reject")}
           >
-            <Text className="text-white text-center font-semibold">
-              Reject
-            </Text>
+            <Text className="text-white text-center font-semibold">Reject</Text>
           </TouchableOpacity>
         </View>
       )}
@@ -143,9 +156,7 @@ const LandlordBookingsScreen = () => {
         keyExtractor={(item) => item._id}
         renderItem={renderItem}
         ListEmptyComponent={
-          <Text className="text-center text-gray-500 mt-10">
-            No bookings available
-          </Text>
+          <Text className="text-center text-gray-500 mt-10">No bookings available</Text>
         }
       />
     </View>

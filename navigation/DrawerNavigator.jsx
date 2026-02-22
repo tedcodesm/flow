@@ -1,10 +1,7 @@
-import {
-  createDrawerNavigator,
-  DrawerItemList,
-} from "@react-navigation/drawer";
 import React, { useContext } from "react";
-import { View, Image } from "react-native";
+import { View, Text, Image, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { createDrawerNavigator, DrawerItemList } from "@react-navigation/drawer";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import BottomNavigator from "./BottomNavigator";
@@ -17,25 +14,24 @@ import TenantProfileSreen from "../screens/TenantProfileSreen";
 import PropertyScreen from "../screens/PropertyScreen";
 import IncomeReportScreen from "../screens/IncomeReportScreen";
 import CreatePropertyScreen from "../screens/CreatePropertyScreen";
-import { BASE_URL } from "../config/Ip";
-import { AuthContext } from "../context/AuthContext.jsx";
 import LandlordProfileScreen from "../screens/LandlordProfileScreen.jsx";
 import LandlordBookingsScreen from "../screens/LandlordBookingScreen.jsx";
+
+import { AuthContext } from "../context/AuthContext.jsx";
 
 const Drawer = createDrawerNavigator();
 
 const DrawerNavigator = () => {
-  const { role } = useContext(AuthContext);
+  const { role, loading } = useContext(AuthContext);
 
-  // handle get user by id
-  const getUser = async () => {
-    try {
-      const res = await axios.get(`${BASE_URL}/user/:id`); // replace with actual user ID
-      console.log("User data:", res.data);
-    } catch (error) {
-      console.error("Error fetching user:", error.message);
-    }
-  };
+  if (loading) {
+    return (
+      <View className="flex-1 justify-center items-center bg-white">
+        <ActivityIndicator size="large" color="#14213D" />
+        <Text className="mt-2 text-gray-600 text-lg">Loading user info...</Text>
+      </View>
+    );
+  }
 
   return (
     <Drawer.Navigator
@@ -102,11 +98,7 @@ const DrawerNavigator = () => {
             options={{
               drawerLabel: "Income Report",
               drawerIcon: ({ color, size }) => (
-                <MaterialCommunityIcons
-                  name="chart-line"
-                  size={size}
-                  color={color}
-                />
+                <MaterialCommunityIcons name="chart-line" size={size} color={color} />
               ),
             }}
           />
@@ -116,11 +108,7 @@ const DrawerNavigator = () => {
             options={{
               drawerLabel: "Landlord Profile",
               drawerIcon: ({ color, size }) => (
-                <MaterialCommunityIcons
-                  name="account"
-                  size={size}
-                  color={color}
-                />
+                <MaterialCommunityIcons name="account" size={size} color={color} />
               ),
             }}
           />
@@ -130,11 +118,7 @@ const DrawerNavigator = () => {
             options={{
               drawerLabel: "Landlord Bookings",
               drawerIcon: ({ color, size }) => (
-                <MaterialCommunityIcons
-                  name="calendar-check"
-                  size={size}
-                  color={color}
-                />
+                <MaterialCommunityIcons name="calendar-check" size={size} color={color} />
               ),
             }}
           />
@@ -143,7 +127,7 @@ const DrawerNavigator = () => {
 
       {role === "tenant" && (
         <>
-          <Drawer.Screen
+          {/* <Drawer.Screen
             name="rent"
             component={RentPaymentScreen}
             options={{
@@ -152,7 +136,7 @@ const DrawerNavigator = () => {
                 <MaterialCommunityIcons name="cash" size={size} color={color} />
               ),
             }}
-          />
+          /> */}
 
           <Drawer.Screen
             name="hist"
@@ -160,25 +144,18 @@ const DrawerNavigator = () => {
             options={{
               drawerLabel: "Payment history",
               drawerIcon: ({ color, size }) => (
-                <MaterialCommunityIcons
-                  name="history"
-                  size={size}
-                  color={color}
-                />
+                <MaterialCommunityIcons name="history" size={size} color={color} />
               ),
             }}
           />
+
           <Drawer.Screen
             name="ten"
             component={TenantProfileSreen}
             options={{
               drawerLabel: "Tenant profile",
               drawerIcon: ({ color, size }) => (
-                <MaterialCommunityIcons
-                  name="account"
-                  size={size}
-                  color={color}
-                />
+                <MaterialCommunityIcons name="account" size={size} color={color} />
               ),
             }}
           />

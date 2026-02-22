@@ -4,14 +4,9 @@ import {
   View,
   TouchableOpacity,
   TextInput,
-  ScrollView,
-  KeyboardAvoidingView,
   Platform,
-  Keyboard,
-  TouchableWithoutFeedback,
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import axios from "axios";
@@ -44,24 +39,16 @@ export default function SignUpScreen({ navigation }) {
     return (
       <TouchableOpacity
         onPress={() => setRole(value)}
-        className="flex-row items-center px-4 py-3 rounded-xl border"
-        style={{
-          backgroundColor: selected ? "#14213D" : "#E5E7EB",
-          borderColor: selected ? "#14213D" : "#D1D5DB",
-        }}
+        className={`flex-row items-center px-4 py-3 rounded-lg border flex-1 ${
+          selected ? "bg-[#14213D] border-[#14213D]" : "bg-gray-200 border-gray-300"
+        }`}
       >
         <MaterialCommunityIcons
           name={selected ? "radiobox-marked" : "radiobox-blank"}
           size={22}
           color={selected ? "white" : "#6B7280"}
         />
-        <Text
-          style={{
-            marginLeft: 8,
-            fontWeight: "600",
-            color: selected ? "white" : "#374151",
-          }}
-        >
+        <Text className={`ml-2 font-semibold ${selected ? "text-white" : "text-gray-700"}`}>
           {label}
         </Text>
       </TouchableOpacity>
@@ -70,100 +57,86 @@ export default function SignUpScreen({ navigation }) {
 
   return (
     <SafeAreaView className="flex-1 bg-[#14213D]">
-      {/* Top area same as status bar */}
-      <View className="h-28 bg-[#14213D]" />
+  {/* Top colored area */}
+  <View className="h-28 bg-[#14213D]" />
 
-      {/* Form area */}
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        className="flex-1"
+  <KeyboardAwareScrollView
+    className="flex-1 px- py-6"
+    enableOnAndroid
+    extraScrollHeight={Platform.OS === "ios" ? 20 : 100}
+    keyboardShouldPersistTaps="handled"
+    contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }}
+  >
+    {/* Form area with rounded top */}
+    <View className="flex-1 bg-gray-200 rounded-t-xl px-4 py-6">
+      {/* Header */}
+      <Text className="text-4xl font-bold text-black text-center mb-2">
+        Create Account
+      </Text>
+      <Text className="text-gray-600 text-center mb-6">
+        Sign up to get started
+      </Text>
+
+      {/* Role Selection */}
+      <Text className="text-black font-semibold mb-2">I am a:</Text>
+      <View className="flex-row gap-3 mb-6">
+        {renderRadioOption("Tenant", "tenant")}
+        {renderRadioOption("Landlord", "landlord")}
+      </View>
+
+      {/* Inputs */}
+      <TextInput
+        placeholder="Full Name"
+        placeholderTextColor="#9CA3AF"
+        value={username}
+        onChangeText={setUsername}
+        className="w-full bg-white rounded-xl px-4 py-4 mb-4 text-gray-800"
+      />
+      <TextInput
+        placeholder="Email Address"
+        placeholderTextColor="#9CA3AF"
+        value={email}
+        onChangeText={setEmail}
+        keyboardType="email-address"
+        className="w-full bg-white rounded-xl px-4 py-4 mb-4 text-gray-800"
+      />
+      <TextInput
+        placeholder="Phone Number"
+        placeholderTextColor="#9CA3AF"
+        keyboardType="phone-pad"
+        value={phone}
+        onChangeText={setPhone}
+        className="w-full bg-white rounded-xl px-4 py-4 mb-4 text-gray-800"
+      />
+      <TextInput
+        placeholder="Password"
+        placeholderTextColor="#9CA3AF"
+        secureTextEntry
+        value={password}
+        onChangeText={setPassword}
+        className="w-full bg-white rounded-xl px-4 py-4 mb-6 text-gray-800"
+      />
+
+      {/* Sign Up Button */}
+      <TouchableOpacity
+        onPress={handleSignUp}
+        className="w-full bg-[#14213D] py-4 rounded-xl items-center mb-4"
       >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ScrollView vertical={true} className="flex-1 " showsVerticalScrollIndicator={false}
-            contentContainerStyle={{
-              flexGrow: 1,
-              justifyContent: "center",
-            }}
-            enableOnAndroid={true} // keeps keyboard handling on Android
-            extraScrollHeight={20} // extra padding above inputs when keyboard opens
-            keyboardShouldPersistTaps="handled"
-          >
-            <View className="flex-1 bg-gray-200 rounded-t-3xl px-6 py-8">
-              {/* Header */}
-              <Text className="text-4xl font-bold text-[#14213D] mb-6 text-center">
-                Create Account
-              </Text>
-              <Text className="text-gray-600 text-center mb-6">
-                Sign up to get started
-              </Text>
+        <Text className="text-white font-bold text-lg">Sign Up as {role}</Text>
+      </TouchableOpacity>
 
-              {/* Role Selection */}
-              <Text className="text-gray-700 font-semibold mb-2">I am a:</Text>
-              <View className="flex-row gap-3 mb-6">
-                {renderRadioOption("Tenant", "tenant")}
-                {renderRadioOption("Landlord", "landlord")}
-              </View>
-
-              {/* Inputs */}
-              <TextInput
-                placeholder="Full Name"
-                placeholderTextColor="#9CA3AF"
-                value={username}
-                onChangeText={setUsername}
-                className="w-full bg-white rounded-xl px-4 py-4 mb-4 text-gray-800 shadow"
-              />
-
-              <TextInput
-                placeholder="Email Address"
-                placeholderTextColor="#9CA3AF"
-                value={email}
-                onChangeText={setEmail}
-                className="w-full bg-white rounded-xl px-4 py-4 mb-4 text-gray-800 shadow"
-              />
-
-              <TextInput
-                placeholder="Phone Number"
-                placeholderTextColor="#9CA3AF"
-                keyboardType="phone-pad"
-                value={phone}
-                onChangeText={setPhone}
-                className="w-full bg-white rounded-xl px-4 py-4 mb-4 text-gray-800 shadow"
-              />
-
-              <TextInput
-                placeholder="Password"
-                placeholderTextColor="#9CA3AF"
-                secureTextEntry
-                value={password}
-                onChangeText={setPassword}
-                className="w-full bg-white rounded-xl px-4 py-4 mb-6 text-gray-800 shadow"
-              />
-
-              {/* Sign Up Button */}
-              <TouchableOpacity
-                onPress={handleSignUp}
-                className="w-full py-4 rounded-xl items-center"
-                style={{ backgroundColor: "#14213D" }}
-              >
-                <Text className="text-white font-bold text-lg">
-                  Sign Up as {role}
-                </Text>
-              </TouchableOpacity>
-
-              {/* Back to Login */}
-              <TouchableOpacity
-                onPress={() => navigation.navigate("login")}
-                className="mt-4 items-center"
-              >
-                <Text className="text-gray-500">
-                  Already have an account?{" "}
-                  <Text className="text-[#14213D] font-bold">Login</Text>
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </ScrollView>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+      {/* Back to Login */}
+      <TouchableOpacity
+        onPress={() => navigation.navigate("login")}
+        className="items-center"
+      >
+        <Text className="text-gray-600">
+          Already have an account?{" "}
+          <Text className="text-[#14213D] font-bold">Login</Text>
+        </Text>
+      </TouchableOpacity>
+    </View>
+  </KeyboardAwareScrollView>
+</SafeAreaView>
   );
 }

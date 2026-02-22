@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Text, View, Image, TouchableOpacity } from "react-native";
+import { Text, View, Image, TouchableOpacity,Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -8,7 +8,22 @@ import { AuthContext } from "../context/AuthContext";
 const TenantProfileScreen = () => {
   const navigation = useNavigation();
 
-  const {name,phone ,email} = useContext(AuthContext);
+  const {name,phone ,email,logout} = useContext(AuthContext);
+
+  const handleLogout = () => {
+  Alert.alert(
+    "Logout",
+    "Are you sure you want to logout?",
+    [
+      { text: "Cancel" },
+      { text: "Logout", onPress: () => {
+          logout();
+          navigation.replace("login");
+        } 
+      }
+    ]
+  );
+};
 
   return (
     <SafeAreaView className="flex-1">
@@ -29,14 +44,12 @@ const TenantProfileScreen = () => {
           <View className="h-[1px] bg-gray-300" />
 
           <Text className="text-xl">
-            <MaterialCommunityIcons name="phone" size={20} />  +254 {phone}
+            <MaterialCommunityIcons name="phone" size={20} /> {phone}
           </Text>
 
-          <Text className="text-xl font-bold">ID 23453455</Text>
+          <Text className="text-xl font-bold">Email: {email}</Text>
 
-          <Text className="text-xl">
-            <MaterialCommunityIcons name="calendar" size={20} /> 1st Jan 2027 - 31st Dec 2027
-          </Text>
+          
         </View>
 
         <View className="bg-white rounded-xl py-4 px-2">
@@ -53,6 +66,18 @@ const TenantProfileScreen = () => {
         >
           <Text className="text-2xl font-bold text-center">Payment History</Text>
         </TouchableOpacity>
+         <TouchableOpacity className="py-4 px-4 gap-2 items-center w-full justify-center bg-[#14213D] rounded-xl flex-row">
+                  <MaterialCommunityIcons name="toolbox" size={34} color="white" />
+                  <Text className="font-bold text-xl tracking-wide text-white">Maintenance Request</Text>
+                </TouchableOpacity>
+        <TouchableOpacity
+          onPress={handleLogout}
+          className="py-2 px-4 bg-red-500 border border-red-500 rounded-xl"
+        >
+          <Text className="text-2xl font-bold text-center text-white">Logout</Text>
+        </TouchableOpacity>
+        
+               
       </View>
     </SafeAreaView>
   );

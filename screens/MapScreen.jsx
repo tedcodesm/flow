@@ -93,22 +93,33 @@ export default function MapScreen() {
     })();
   }, []);
 
-  // Fetch nearby houses
-  const fetchNearbyHouses = async () => {
-    try {
-      const res = await axios.get(`${BASE_URL}/property/nearby`, {
-        params: {
-          latitude: userLocation.latitude,
-          longitude: userLocation.longitude,
-        },
-      });
+const fetchNearbyHouses = async () => {
+  if (!userLocation) return;
 
-      setHouses(res.data);
-      console.log("houses daaata", res.data);
-    } catch (error) {
-      console.log("Error fetching houses:", error.message);
+  try {
+    const res = await axios.get(`${BASE_URL}/property/nearby`, {
+      params: {
+        latitude: userLocation.latitude,
+        longitude: userLocation.longitude,
+      },
+    });
+
+    const nearbyHouses = res.data;
+
+    if (!nearbyHouses || nearbyHouses.length === 0) {
+      Alert.alert(
+        "No houses found",
+        "There are no houses within a 10 km radius"
+      );
     }
-  };
+
+    setHouses(nearbyHouses);
+    console.log("Nearby houses:", nearbyHouses);
+  } catch (error) {
+    console.log("Error fetching houses:", error.message);
+    Alert.alert("Error", "Failed to fetch nearby houses");
+  }
+};
 
   if (!userLocation) {
     return <MapView style={StyleSheet.absoluteFillObject} />;
@@ -129,10 +140,8 @@ export default function MapScreen() {
         showsUserLocation
         followsUserLocation
       >
-        {/* User marker */}
         <Marker coordinate={userLocation} />
 
-        {/* House markers */}
         {houses.map((house) => (
           <Marker
             key={house._id}
@@ -143,7 +152,7 @@ export default function MapScreen() {
             title={house.title}
             description={`Ksh ${house.price}`}
           >
-            <MaterialIcons name="home" size={30} color="red" />
+            <MaterialIcons name="home" size={30} color="#00FF00" />
           </Marker>
         ))}
       </MapView>
