@@ -82,7 +82,7 @@ useFocusEffect(
     <View className="flex-1 bg-[#14213D]">
       {/* Search & Filters */}
       <View className="bg-[#14213D] px-4 pt-8 pb-4">
-        <Text className="text-white text-3xl font-bold mb-3">Discover</Text>
+        <Text className="text-white text-3xl font-bold mb-3">Explore</Text>
 
         <View className="flex-row bg-gray-200 rounded-xl items-center px-4 py-2">
           <MaterialCommunityIcons name="magnify" size={24} color="#9CA3AF" />

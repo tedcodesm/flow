@@ -6,11 +6,14 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import StackNavigator from "./navigation/StackNavigator";
 import "./global.css";
 import { AuthProvider } from './context/AuthContext';
+import { SocketProvider } from './context/SocketContext';
 
 export default function App() {
   return (
     <AuthProvider>
+      <SocketProvider>
       <StackNavigator />
+      </SocketProvider>
     </AuthProvider>
   );
 }

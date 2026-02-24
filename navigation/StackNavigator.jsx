@@ -23,6 +23,7 @@ import DetailScreen from '../screens/DetaillsScreen';
 import BookingScreen from '../screens/BookingScreen';
 import LandlordProfileScreen from '../screens/LandlordProfileScreen';
 import LandlordBookingsScreen from '../screens/LandlordBookingScreen';
+import MessagingScreen from '../screens/MessagingScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -50,6 +51,7 @@ const StackNavigator = () => {
         <Stack.Screen name="booking" component={BookingScreen} />
         <Stack.Screen name="landi" component={LandlordProfileScreen} />
         <Stack.Screen name="bookings" component={LandlordBookingsScreen} />
+        <Stack.Screen name="messaging" component={MessagingScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

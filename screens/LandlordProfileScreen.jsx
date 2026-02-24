@@ -33,10 +33,8 @@ const handleLogout = () => {
   return (
     <SafeAreaView className="flex-1 bg-gray-100">
 
-      {/* HEADER */}
       <View className="items-center mt-6">
 
-        {/* PROFILE IMAGE */}
         <View className="w-28 h-28 rounded-full bg-[#14213D] items-center justify-center">
           <MaterialCommunityIcons
             name="account"
